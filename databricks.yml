@@ -1,0 +1,23 @@
+# Databricks Asset Bundle: deploys the notebooks and package, and creates the job.
+#   databricks bundle validate -t dev
+#   databricks bundle deploy   -t dev
+#   databricks bundle run manufacturing_etl -t dev
+bundle:
+  name: manufacturing-streaming-etl
+
+include:
+  - resources/*.yml
+
+variables:
+  storage_account:
+    description: ADLS Gen2 account that holds landing/bronze/silver/gold containers
+  auth_mode:
+    description: unity_catalog (recommended) or oauth (service principal via secret scope)
+    default: unity_catalog
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://adb-XXXXXXXXXXXXXXXX.X.azuredatabricks.net  # your workspace URL

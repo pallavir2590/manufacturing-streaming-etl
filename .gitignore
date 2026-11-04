@@ -1,0 +1,23 @@
+# Local data lake created by scripts/run_local.py and Spark temp files
+local_lake/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Databricks bundle state and secrets: never commit
+.databricks/
+.env
+*.pem
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

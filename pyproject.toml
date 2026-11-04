@@ -1,0 +1,16 @@
+[project]
+name = "mfg-etl"
+version = "1.0.0"
+description = "Real-time manufacturing ETL on Azure Databricks: Structured Streaming + Delta Lake medallion pipeline"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["notebooks"]   # Databricks notebooks use spark/dbutils/display globals
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

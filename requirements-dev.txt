@@ -1,0 +1,5 @@
+# Local development and CI only. Databricks Runtime already includes Spark and Delta.
+pyspark==4.0.1
+delta-spark==4.0.0
+pytest==8.4.2
+ruff==0.14.3

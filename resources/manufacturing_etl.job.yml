@@ -1,0 +1,37 @@
+resources:
+  jobs:
+    manufacturing_etl:
+      name: manufacturing-streaming-etl
+      max_concurrent_runs: 1          # two runs must never share the same checkpoints
+      # Uncomment to run every 5 minutes (near-real-time Gold):
+      # schedule:
+      #   quartz_cron_expression: "0 0/5 * * * ?"
+      #   timezone_id: UTC
+      email_notifications:
+        on_failure: []                # add your email
+      parameters:
+        - name: storage_account
+          default: ${var.storage_account}
+        - name: auth_mode
+          default: ${var.auth_mode}
+      tasks:
+        - task_key: master_data
+          notebook_task: { notebook_path: ../notebooks/01_master_data.py }
+        - task_key: simulate_sources
+          depends_on: [{ task_key: master_data }]
+          notebook_task: { notebook_path: ../notebooks/02_simulate_sources.py }
+        - task_key: bronze
+          depends_on: [{ task_key: simulate_sources }]
+          notebook_task: { notebook_path: ../notebooks/03_bronze_ingest.py }
+        - task_key: silver_telemetry
+          depends_on: [{ task_key: bronze }]
+          notebook_task: { notebook_path: ../notebooks/04_silver_telemetry.py }
+        - task_key: silver_production
+          depends_on: [{ task_key: bronze }]
+          notebook_task: { notebook_path: ../notebooks/05_silver_production.py }
+        - task_key: gold
+          depends_on: [{ task_key: silver_telemetry }, { task_key: silver_production }]
+          notebook_task: { notebook_path: ../notebooks/06_gold_kpis.py }
+        - task_key: validate
+          depends_on: [{ task_key: gold }]
+          notebook_task: { notebook_path: ../notebooks/07_validate.py }
