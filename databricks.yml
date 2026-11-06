@@ -9,8 +9,16 @@ include:
   - resources/*.yml
 
 variables:
+  storage_mode:
+    description: volume (Unity Catalog volume, works on Free Edition) or adls (your own ADLS Gen2 account)
+    default: volume
+  catalog:
+    default: workspace
+  schema:
+    default: default
   storage_account:
-    description: ADLS Gen2 account that holds landing/bronze/silver/gold containers
+    description: ADLS Gen2 account (adls mode only)
+    default: ""
   auth_mode:
     description: unity_catalog (recommended) or oauth (service principal via secret scope)
     default: unity_catalog
@@ -20,4 +28,4 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://adb-XXXXXXXXXXXXXXXX.X.azuredatabricks.net  # your workspace URL
+      host: https://<your-workspace>.cloud.databricks.com  # your workspace URL

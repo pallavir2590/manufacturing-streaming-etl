@@ -25,6 +25,11 @@ class Paths:
         return cls(f"abfss://{{container}}@{storage_account}.dfs.core.windows.net/manufacturing")
 
     @classmethod
+    def for_volume(cls, volume_path: str) -> Paths:
+        """Unity Catalog volume, e.g. /Volumes/workspace/default/manufacturing (Databricks Free Edition)."""
+        return cls(f"{volume_path.rstrip('/')}/{{container}}/manufacturing")
+
+    @classmethod
     def for_local(cls, base_dir: str) -> Paths:
         return cls(f"{base_dir.rstrip('/')}/{{container}}/manufacturing")
 
