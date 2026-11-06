@@ -110,7 +110,17 @@ Expected result on a clean run:
 
 `python scripts/run_local.py --replay` sends the same files again: Bronze doubles to 12, Silver stays at 3.
 
-## Deploy to Azure Databricks
+## Run on Databricks Free Edition (no cloud account needed)
+
+1. Sign up for [Databricks Free Edition](https://www.databricks.com/learn/free-edition).
+2. **Workspace → Create → Git folder** and paste this repository's URL.
+3. Open `notebooks/` and run `01` → `07` in order (default `storage_mode = volume`). Data is written
+   to the Unity Catalog volume `/Volumes/workspace/default/manufacturing`, which is created automatically.
+4. Optional: create a **Job** with the seven notebooks as tasks, or deploy it with the bundle below.
+
+Free Edition uses serverless compute, which is why every stream uses `trigger(availableNow=True)`.
+
+## Deploy to Azure Databricks with ADLS Gen2
 
 1. Create an **ADLS Gen2** storage account (hierarchical namespace on) with containers
    `landing`, `bronze`, `silver`, `gold`.
@@ -122,10 +132,11 @@ Expected result on a clean run:
 3. Set your workspace URL in `databricks.yml`, then:
 
 ```bash
-databricks bundle validate -t dev --var="storage_account=<account>"
-databricks bundle deploy   -t dev --var="storage_account=<account>"
+databricks bundle deploy -t dev --var="storage_mode=adls" --var="storage_account=<account>"
 databricks bundle run manufacturing_etl -t dev
 ```
+
+(On Free Edition, `databricks bundle deploy -t dev` alone uses the volume defaults.)
 
 The job runs: master data → simulate sources → Bronze → Silver telemetry ‖ Silver production → Gold → validate.
 Uncomment the schedule in `resources/manufacturing_etl.job.yml` to refresh every 5 minutes.

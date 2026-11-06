@@ -43,4 +43,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: databricks/setup-cli@main
-      - run: databricks bundle validate -t dev --var="storage_account=${{ vars.STORAGE_ACCOUNT }}"
+      - run: databricks bundle validate -t dev

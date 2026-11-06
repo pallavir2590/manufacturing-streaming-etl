@@ -10,6 +10,12 @@ resources:
       email_notifications:
         on_failure: []                # add your email
       parameters:
+        - name: storage_mode
+          default: ${var.storage_mode}
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
         - name: storage_account
           default: ${var.storage_account}
         - name: auth_mode
